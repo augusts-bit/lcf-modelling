@@ -359,7 +359,7 @@ for i in range(len(targets)):
 print(pred_df.head(32))
 
 import math
-import statistics
+from statistics import mean
 from sklearn.metrics import mean_squared_error
 
 # RMSE
@@ -369,8 +369,20 @@ print("RMSE based on the prediction and validation dataframe: ")
 for target in targets:
     predicted = pred_df[target]
     actual = validf[target]
+
     rmse_column = mean_squared_error(predicted, actual) ** 0.5
     print(f'RMSE for {target}: {rmse_column}')
+
+print("\n")
+
+# MAE
+print("MAE based on the prediction and validation dataframe: ")
+for target in targets:
+    predicted = pred_df[target]
+    actual = validf[target]
+
+    difference = [abs(predicted - actual) for predicted, actual in zip(predicted, actual)]
+    mae = mean(difference)
     
 pred_df.to_csv('LSTM_predict_L1.csv')
 
