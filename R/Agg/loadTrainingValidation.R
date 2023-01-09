@@ -341,7 +341,7 @@ filename = "C:/Users/augus/Documents/Studie/MGI/Thesis/DataAugust/entireHarmonic
 # samplePoints = read.csv2(filename, header = T, sep = ",", dec = ".") # creates num columns
 # samplePoints = read.csv(filename, header = T, sep = ",", dec = ".")
 samplePoints = read_excel(filename, col_names = TRUE)
-samplePoints$ï..rowid = NULL #remove duplicate ID column
+samplePoints$Ã¯..rowid = NULL #remove duplicate ID column
 rm(filename)
 
 # merge fractions based on location_id
@@ -556,7 +556,7 @@ filename = "C:/Users/augus/Documents/Studie/MGI/Thesis/Rob's/Data/raw/reference_
 # samplePoints = read.csv2(filename, header = T, sep = ",", dec = ".") # creates num columns
 # samplePoints = read.csv(filename, header = T, sep = ",", dec = ".")
 samplePoints = read_excel(filename, col_names = TRUE)
-samplePoints$ï..rowid = NULL #remove duplicate ID column
+samplePoints$Ã¯..rowid = NULL #remove duplicate ID column
 rm(filename)
 
 validationRaw2015 = samplePoints[samplePoints$dataYear == "2015",]
