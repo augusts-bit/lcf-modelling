@@ -384,4 +384,4 @@ for target in targets:
     difference = [abs(predicted - actual) for predicted, actual in zip(predicted, actual)]
     mae = mean(difference)
     
-pred_df.to_csv('LSTM_predict_L1.csv')
+pred_df.to_csv('LSTM_predict_MSE.csv')
