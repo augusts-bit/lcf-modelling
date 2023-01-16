@@ -299,10 +299,10 @@ dense_vali_targets <-dense_vali_targets[with(dense_vali_targets,order(location_i
 # [29] "snow"             "tree"             "urban_built_up"   "water"            "class_s50"        "class_s50_plus5"  "class_s50_minus5"
 # [36] "chClass"          "chSubPixel"       "dominant_lc"      "total"    
 
-targets <- dense_vali_targets[, c("sample_id", "location_id", "validation_id", "reference_year", "subpix_mean_x", "subpix_mean_y", "bare", "crops",
+targets <- dense_vali_targets[, c("sample_id", "location_id", "validation_id", "dataYear", "subpix_mean_x", "subpix_mean_y", "bare", "crops",
                          "grassland", "shrub", "tree", "urban_built_up", "water",
                          "dominant_lc")]
-colnames(targets)[colnames(targets) %in% c("subpix_mean_x", "subpix_mean_y")] <- c("x", "y")
+colnames(targets)[colnames(targets) %in% c("dataYear", "subpix_mean_x", "subpix_mean_y")] <- c("reference_year", "x", "y")
 
 ## Write final dataframe to file ##
 
