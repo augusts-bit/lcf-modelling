@@ -161,7 +161,7 @@ write.csv(dense_vali_noXY, "C:/Users/augus/Documents/Studie/MGI/Thesis/DataAugus
 # Fractions
 filename = "C:/Users/augus/Documents/Studie/MGI/Thesis/Rob's/Data/raw/reference_global_100m_orig&change_year2015-2019_20210407.xlsx"
 samplePoints = read_excel(filename, col_names = TRUE)
-samplePoints$ï..rowid = NULL #remove duplicate ID column
+samplePoints$Ã¯..rowid = NULL #remove duplicate ID column
 rm(filename)
 
 # Get fractions for each year
@@ -302,6 +302,7 @@ dense_vali_targets <-dense_vali_targets[with(dense_vali_targets,order(location_i
 targets <- dense_vali_targets[, c("sample_id", "location_id", "validation_id", "reference_year", "subpix_mean_x", "subpix_mean_y", "bare", "crops",
                          "grassland", "shrub", "tree", "urban_built_up", "water",
                          "dominant_lc")]
+colnames(targets)[colnames(targets) %in% c("subpix_mean_x", "subpix_mean_y")] <- c("x", "y")
 
 ## Write final dataframe to file ##
 
