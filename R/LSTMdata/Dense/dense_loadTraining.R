@@ -161,7 +161,7 @@ write.csv(dense_train_noXY, "C:/Users/augus/Documents/Studie/MGI/Thesis/DataAugu
 # Fractions
 filename = "C:/Users/augus/Documents/Studie/MGI/Thesis/Rob's/Data/raw/Data_Global_quoted_New.xlsx"
 samplePoints = read_excel(filename, col_names = TRUE)
-samplePoints$ï..rowid = NULL #remove duplicate ID column
+samplePoints$Ã¯..rowid = NULL #remove duplicate ID column
 rm(filename)
 
 # Get fractions for each year
@@ -169,6 +169,12 @@ trainingRaw2015 = samplePoints[samplePoints$reference_year == "2015",]
 trainingRaw2016 = samplePoints[samplePoints$reference_year == "2016",]
 trainingRaw2017 = samplePoints[samplePoints$reference_year == "2017",]
 trainingRaw2018 = samplePoints[samplePoints$reference_year == "2018",]
+
+# They all have one row in which all classes are NA, remove it
+trainingRaw2015 <- trainingRaw2015[!is.na(trainingRaw2015$tree),]
+trainingRaw2016 <- trainingRaw2016[!is.na(trainingRaw2016$tree),]
+trainingRaw2017 <- trainingRaw2017[!is.na(trainingRaw2017$tree),]
+trainingRaw2018 <- trainingRaw2018[!is.na(trainingRaw2018$tree),]
 
 # Function to update classes and most dominant class
 
@@ -182,11 +188,11 @@ updateClasses <- function(df) {
   names(df)[names(df) == "urban"] = "urban_built_up"
   
   # Now calculate most dominant class + add as column
-  # classFractions = df[,classes[classes %in% names(df)]]
-  # classFractions$geometry <- NULL
-  # DominantClasses = apply(classFractions, 1, which.max)
-  # classes[DominantClasses]
-  # df$dominant_lc = factor(classes[DominantClasses]) # new column with dominant land cover
+  classFractions = df[,classes[classes %in% names(df)]]
+  classFractions$geometry <- NULL
+  DominantClasses = apply(classFractions, 1, which.max)
+  classes[DominantClasses]
+  df$dominant_lc = factor(classes[DominantClasses]) # new column with dominant land cover
   
   # Drop rows dominated by not_sure
   df = df[!df$dominant_lc == "not_sure",]
@@ -203,12 +209,15 @@ updateClasses <- function(df) {
   
   df$geometry <- NULL
   
-  # Change the names also in the 'dominant_lc' column
-  df$dominant_lc <- ifelse(df$dominant_lc == "burnt", "grassland", df$dominant_lc)
-  df$dominant_lc <- ifelse(df$dominant_lc == "fallow_shifting_cultivationt", "crops", df$dominant_lc)
-  df$dominant_lc <- ifelse(df$dominant_lc == "wetland_herbaceous", "grassland", df$dominant_lc)
-  df$dominant_lc <- ifelse(df$dominant_lc == "lichen_and_moss", "grassland", df$dominant_lc)
-  df$dominant_lc <- ifelse(df$dominant_lc == "snow_and_ice", "bare", df$dominant_lc)
+  # # Change the names also in the 'dominant_lc' column
+  # df$dominant_lc <- ifelse(df$dominant_lc == "burnt", "grassland", df$dominant_lc)
+  # df$dominant_lc <- ifelse(df$dominant_lc == "fallow_shifting_cultivationt", "crops", df$dominant_lc)
+  # df$dominant_lc <- ifelse(df$dominant_lc == "wetland_herbaceous", "grassland", df$dominant_lc)
+  # df$dominant_lc <- ifelse(df$dominant_lc == "lichen_and_moss", "grassland", df$dominant_lc)
+  # df$dominant_lc <- ifelse(df$dominant_lc == "snow_and_ice", "bare", df$dominant_lc)
+  
+  # Check to see if now adds up to 100
+  df$total <- df$bare + df$shrub + df$grassland + df$crops + df$urban_built_up + df$water + df$tree
   
   # Now load the new classes
   classes <- loadClassNames()
@@ -234,13 +243,13 @@ updateClasses <- function(df) {
   sum(round(rowSums(df[, classes])) != 100) 
   
   # # Update dominant land cover class
-  # table(df$dominant_lc)
-  # classFractions = df[,classes[classes %in% names(df)]]
-  # DominantClasses = apply(classFractions, 1, which.max)
-  # #classes[DominantClasses]
-  # df$dominant_lc = factor(classes[DominantClasses])
-  # table(df$dominant_lc)
-  # rm(classFractions)
+  table(df$dominant_lc)
+  classFractions = df[,classes[classes %in% names(df)]]
+  DominantClasses = apply(classFractions, 1, which.max)
+  #classes[DominantClasses]
+  df$dominant_lc = factor(classes[DominantClasses])
+  table(df$dominant_lc)
+  rm(classFractions)
   
   # Remove old columns
   df$burnt=NULL
@@ -250,7 +259,7 @@ updateClasses <- function(df) {
   df$wetland_herbaceous=NULL
   df$not_sure=NULL
   
-  # Check to see if adds up to 100
+  # Check to see if now adds up to 100
   df$total <- df$bare + df$shrub + df$grassland + df$crops + df$urban_built_up + df$water + df$tree
   
   return(df)
@@ -303,3 +312,18 @@ targets_noXY$y <- NULL
 
 write.csv(targets_noXY, "C:/Users/augus/Documents/Studie/MGI/Thesis/DataAugust/LSTM/Input/Dense/dense_train_targets_noXY.csv")
 
+## Since some samples were omitted for the targets, omit the same samples for the inputs and overwrite old input ##
+
+traininputs <- read.csv("C:/Users/augus/Documents/Studie/MGI/Thesis/DataAugust/LSTM/Input/Dense/dense_train_input.csv")
+
+traininputs_new <- subset(traininputs, sample_id %in% targets$sample_id) # now they have the same (and amount of) samples!
+
+# rewrite to csv 
+write.csv(traininputs_new, "C:/Users/augus/Documents/Studie/MGI/Thesis/DataAugust/LSTM/Input/Dense/dense_train_input.csv")
+
+# (+ one without X and Y)
+traininputs_new_noXY <- traininputs_new
+traininputs_new_noXY$x <- NULL
+traininputs_new_noXY$y <- NULL
+
+write.csv(traininputs_new_noXY, "C:/Users/augus/Documents/Studie/MGI/Thesis/DataAugust/LSTM/Input/Dense/dense_train_input_noXY.csv")
