@@ -9,7 +9,7 @@ Repository as developed for the master thesis "IMPROVING THE ROBUSTNESS OF GLOBA
 
 **src** is divided into 4 subfolders, containing code for developing training and validation data (**1-developing**), modelling annual and dense land cover fractions using RF and LSTM models (**2-modelling**), post-processing predictions using post-processing LSTM (PostLSTM) and Markov chain models (**3-post-processing**) and an accuracy assessment (**4-accuracy-assessment**).   
 
-Credits to the Markov chain and large parts of the RF code go to https://github.com/roburger/lcfMapping.  
+Credits of the Markov chain and large parts of the RF code go to https://github.com/roburger/lcfMapping.  
 
 Note: This study used reference (IIASA/WUR) data sets and Landsat imagery that are expected to be in a ``Data/raw`` folder. Furthermore, code may contain errors and lack efficiency. For questions, contact: august.slomp@wur.nl or augustslomp@gmail.com.
 
